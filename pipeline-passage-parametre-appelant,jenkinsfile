@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('lancement 2e job') {
+            steps {
+                build job : 'pipeline-passage-parametre-appele', parameters: [[$class: 'StringParameterValue', name: 'PERSON', value: 'Nico']]
+            }
+        }
+    }
+}

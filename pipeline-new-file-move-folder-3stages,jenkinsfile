@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Init dossier') {
+            steps {
+                bat 'mkdir dossier-toto'
+            }
+        }
+        stage('Init fichier') {
+            steps {
+                bat 'echo \'toto\' >> toto.txt'
+            }
+        }
+        stage('Déplacement dans dossier') {
+            steps {
+                bat 'move toto.txt dossier-toto'
+            }
+        }
+    }
+}

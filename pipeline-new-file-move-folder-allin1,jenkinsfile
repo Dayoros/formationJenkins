@@ -1,0 +1,13 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('all in one') {
+            steps {
+                bat 'mkdir dossier-toto'
+                bat 'echo \'toto\' >> toto.txt'
+                bat 'move toto.txt dossier-toto'
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven 386'
+    }
+    
+    stages {
+        stage('recupération git') {
+            steps {
+                bat 'rmdir /s /q exemplev11'
+                bat 'git config --global user.email \"nd.news.perso@gmail.com\"'
+                bat 'git config --global user.name \"NicoViaJenkins\"'
+                bat 'git clone https://github.com/Dayoros/exemplev11'
+                dir('exemplev11') {
+                    bat 'echo toto >> totojenkins.txt'
+                    bat 'git add totojenkins.txt'
+                    bat "git commit -m \"ajout du fichier\""                    
+                }
+            }
+        }
+        stage('Maven') {
+            steps {
+                dir('exemplev11') {
+                    bat 'mvn test'
+                    bat 'mvn clean package'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Je passe toujours par là'
+            deleteDir()
+        }
+    }
+}
