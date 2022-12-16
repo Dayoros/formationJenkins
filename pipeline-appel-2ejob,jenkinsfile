@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven 386'
+    }
+    
+    stages {
+        stage('git') {
+            steps {
+                deleteDir()
+                bat 'git config --global user.email \"nd.news.perso@gmail.com\"'
+                bat 'git config --global user.name \"NicoViaJenkins\"'
+                bat 'git clone https://github.com/Dayoros/exemplev11'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('exemplev11') {
+                    bat 'mvn clean package'
+                    archiveArtifacts 'target/*.war'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('exemplev11') {
+                    bat 'mvn test'
+                }
+            }
+        }
+        stage('deploy') {
+            when {
+                expression {
+                    currentBuild.currentResult == 'SUCCESS'
+                }
+            }
+            steps {
+                build job: 'deploy projet pipeline-appel-2ejob'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Je passe toujours par là'
+            deleteDir()
+        }
+    }
+}

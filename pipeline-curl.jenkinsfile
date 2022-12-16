@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    
+    environment {
+        myJob = "${env.JOB_DISPLAY_URL}"
+    }
+    
+    stages {
+        stage('Stage 2 - recup var') {
+            steps {
+                echo "${env.BUILD_NUMBER}"
+                echo "${env.WORKSPACE}"
+                echo "${env.myJob}"
+            }
+        }
+        stage('curl') {
+            steps {
+                echo "mon lien vers le job : ${env.myJob}"
+                bat "curl ${env.myJob}"
+            }
+        }           
+    }
+}
